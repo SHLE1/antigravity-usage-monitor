@@ -33,6 +33,7 @@ import {
   DEFAULT_OVERVIEW_METRICS,
   DEFAULT_OVERVIEW_MODULES,
   DEFAULT_POPOVER_WIDTH,
+  DEFAULT_QUOTA_DISPLAY_MODE,
   DEFAULT_STEP_TABLE_COLUMNS,
   DEFAULT_STEP_TOKEN_COMBO_FORMAT,
   DEFAULT_TOPBAR_SLOTS,
@@ -54,6 +55,7 @@ import {
   normalizePluginUpdateMode,
   normalizePopoverWidth,
   normalizePopoverWidthMode,
+  normalizeQuotaDisplayMode,
   normalizeStepTableColumns,
   normalizeStepTokenComboFormat,
   normalizeTopbarCapsuleSlots,
@@ -495,6 +497,8 @@ export const normalizeClientPopoverWidthMode = normalizePopoverWidthMode;
 export const normalizeClientPopoverWidth = normalizePopoverWidth;
 export const normalizeClientModelDisplayMode = normalizeModelDisplayMode;
 export const normalizeClientTopbarSlots = normalizeTopbarCapsuleSlots;
+export const DEFAULT_CLIENT_QUOTA_DISPLAY_MODE = DEFAULT_QUOTA_DISPLAY_MODE;
+export const normalizeClientQuotaDisplayMode = normalizeQuotaDisplayMode;
 export const normalizeClientContextAgentMode = normalizeContextAgentMode;
 export const normalizeClientExperimentalQuotaReservation = normalizeExperimentalQuotaReservation;
 export const normalizeClientAccountQuotaRefreshMinutes = normalizeAccountQuotaRefreshMinutes;
@@ -648,6 +652,12 @@ export function isEquivalentTelemetry(prev, next) {
     return false;
   }
   if (Boolean(pSet?.showStepFilterToolbar) !== Boolean(nSet?.showStepFilterToolbar)) {
+    return false;
+  }
+  if (
+    normalizeClientQuotaDisplayMode(pSet?.quotaDisplayMode) !==
+    normalizeClientQuotaDisplayMode(nSet?.quotaDisplayMode)
+  ) {
     return false;
   }
   if (
@@ -1921,6 +1931,9 @@ export async function saveSettingsPatch(patch) {
   }
   if (Object.prototype.hasOwnProperty.call(safePatch, 'showStepFilterToolbar')) {
     safePatch.showStepFilterToolbar = Boolean(safePatch.showStepFilterToolbar);
+  }
+  if (Object.prototype.hasOwnProperty.call(safePatch, 'quotaDisplayMode')) {
+    safePatch.quotaDisplayMode = normalizeClientQuotaDisplayMode(safePatch.quotaDisplayMode);
   }
   if (Object.prototype.hasOwnProperty.call(safePatch, 'experimentalQuotaReservation')) {
     safePatch.experimentalQuotaReservation = normalizeClientExperimentalQuotaReservation(

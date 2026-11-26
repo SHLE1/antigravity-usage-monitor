@@ -546,6 +546,20 @@ export function normalizeModernUi(val) {
 export const CONTEXT_AGENT_MODES = Object.freeze(['main', 'auto']);
 export const DEFAULT_CONTEXT_AGENT_MODE = 'main';
 
+export const QUOTA_DISPLAY_MODES = Object.freeze(['used', 'remaining']);
+export const DEFAULT_QUOTA_DISPLAY_MODE = 'used';
+
+/**
+ * 归一化可用额度面板的进度条与百分比显示口径（默认 `'used'` 显示已用，可选 `'remaining'` 显示剩余）。
+ *
+ * @param {unknown} raw
+ * @returns {'used'|'remaining'}
+ */
+export function normalizeQuotaDisplayMode(raw) {
+  const val = String(raw || '').trim().toLowerCase();
+  return val === 'remaining' ? 'remaining' : 'used';
+}
+
 export const ACCOUNT_QUOTA_REFRESH_MINUTES = Object.freeze([10, 30, 60, 180, 360, 720, 1440]);
 export const DEFAULT_ACCOUNT_QUOTA_REFRESH_MINUTES = 60;
 
